@@ -1,0 +1,69 @@
+<canvas id="trail"></canvas>
+
+<script>
+  const canvas = document.getElementById('trail');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const colors = ['#FF6B6B', '#6BCB77', '#4D96FF', '#FFD93D', '#C77DFF'];
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    for (let i = 0; i < 5; i++) {
+      particles.push({
+        x: e.clientX,
+        y: e.clientY,
+        radius: Math.random() * 6 + 2,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 1,
+        dx: (Math.random() - 0.5) * 2,
+        dy: (Math.random() - 0.5) * 2
+      });
+    }
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      p.alpha -= 0.02;
+
+      if (p.alpha <= 0) particles.splice(i, 1);
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+<style>
+  body, html {
+    margin: 0;
+    overflow: hidden;
+    background: #0f0f0f;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    pointer-events: none;
+  }
+</style>
