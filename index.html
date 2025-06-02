@@ -8,7 +8,8 @@
     <title>Anoop Singh Rawat - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        canvas#trail {
+         <!-- cussor trail effect style -->
+        canvas#trail { 
     position: fixed;
     top: 0;
     left: 0;
@@ -379,18 +380,20 @@
     </script>
 
     <!-- this is code for cursor trail effect -->
-    <script>
-  const canvas = document.getElementById('trail');
+<script>
+  const canvas = document.getElementById('cursor-trail');
   const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
 
   const particles = [];
+
   const colors = ['#FF6B6B', '#6BCB77', '#4D96FF', '#FFD93D', '#C77DFF'];
 
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   });
 
   document.addEventListener('mousemove', (e) => {
@@ -398,19 +401,19 @@
       particles.push({
         x: e.clientX,
         y: e.clientY,
-        radius: Math.random() * 6 + 2,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        radius: Math.random() * 4 + 1,
         alpha: 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
         dx: (Math.random() - 0.5) * 2,
-        dy: (Math.random() - 0.5) * 2
+        dy: (Math.random() - 0.5) * 2,
       });
     }
   });
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
 
-    for (let i = particles.length - 1; i >= 0; i--) {
+    for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -421,15 +424,19 @@
       p.y += p.dy;
       p.alpha -= 0.02;
 
-      if (p.alpha <= 0) particles.splice(i, 1);
+      if (p.alpha <= 0) {
+        particles.splice(i, 1);
+        i--;
+      }
     }
 
     ctx.globalAlpha = 1;
-    requestAnimationFrame(animate);
+    requestAnimationFrame(draw);
   }
 
-  animate();
+  draw();
 </script>
+
 
 </body>
 </html>
